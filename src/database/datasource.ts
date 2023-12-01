@@ -1,17 +1,16 @@
 import * as path from 'path';
-import Knex from 'knex';
 import { env } from './database.env';
 
 const knexConfig = {
-  development: {
+  staging: {
     client: 'sqlite3',
     connection: {
-      filename: '',
+      filename: './',
     },
   },
 
-  staging: {
-    client: 'postgresql',
+  development: {
+    client: 'pg',
     connection: {
       host: env.DB_HOST,
       port: env.DB_PORT,
@@ -19,21 +18,16 @@ const knexConfig = {
       password: env.DB_PASSWORD,
       database: env.DB_NAME,
     },
-    pool: {
-      min: 2,
-      max: 10,
-    },
     migrations: {
-      tableName: 'knex_migrations',
-      directory: path.join(__dirname, '/../../**/migrations'),
+      directory: path.join(__dirname, '/../../src/migrations'),
     },
     seeds: {
-      directory: path.join(__dirname, '/../**/seeds'),
+      directory: path.join(__dirname, '/../../src/migrations/seeds'),
     },
   },
 
   production: {
-    client: 'postgresql',
+    client: 'pg',
     connection: {
       host: env.DB_HOST,
       port: env.DB_PORT,
@@ -41,16 +35,11 @@ const knexConfig = {
       password: env.DB_PASSWORD,
       database: env.DB_NAME,
     },
-    pool: {
-      min: 2,
-      max: 10,
-    },
     migrations: {
-      tableName: 'knex_migrations',
-      directory: path.join(__dirname, '/../../**/migrations'),
+      directory: path.join(__dirname, '/../../src/migrations'),
     },
     seeds: {
-      directory: path.join(__dirname, '/../**/seeds'),
+      directory: path.join(__dirname, '/../../src/migrations/seeds'),
     },
   },
 };
@@ -58,6 +47,4 @@ const knexConfig = {
 const environment = process.env.NODE_ENV || 'development';
 const selectedConfig = knexConfig[environment];
 
-const knex = Knex(selectedConfig);
-
-export { knex };
+export default selectedConfig;
