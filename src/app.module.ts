@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { envVarsSchema } from './helpers';
 import { DatabaseModule } from './database';
+import { RabbitMQListenerService } from './rabbitmq-listener.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { DatabaseModule } from './database';
     DatabaseModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [RabbitMQListenerService],
 })
 export class AppModule {}

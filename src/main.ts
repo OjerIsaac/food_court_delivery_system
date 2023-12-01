@@ -1,23 +1,26 @@
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const logger = new Logger('NestApplication');
+  const app = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL],
+      queue: process.env.RABBITMQ_QUEUE_NAME,
+      queueOptions: {
+        durable: process.env.RABBITMQ_QUEUE_DURABLE,
+      },
+    },
+  });
 
-  app.enableCors();
+  const logger = new Logger('NestMicroservice');
 
-  app.setGlobalPrefix('/api');
+  await app.listen();
 
-  const configService = app.get(ConfigService);
-
-  const port = configService.get('PORT');
-
-  await app.listen(port);
-  logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log('Microservice is listening');
 }
 
 bootstrap();
