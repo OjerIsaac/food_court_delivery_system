@@ -4,7 +4,8 @@ export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable('order_types', table => {
     table.string('id').primary();
     table.string('name').notNullable();
-    table.timestamps(true, true);
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
   });
 }
 

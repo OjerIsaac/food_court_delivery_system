@@ -27,6 +27,9 @@ export async function up(knex: Knex): Promise<any> {
     table.boolean('is_hidden').defaultTo(false);
 
     table.foreign('order_id').references('id').inTable('order');
+
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
   });
 }
 

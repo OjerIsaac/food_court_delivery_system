@@ -24,7 +24,8 @@ export async function up(knex: Knex): Promise<any> {
     // Order Total Amount History
     table.json('order_total_amount_history').defaultTo([]);
 
-    table.timestamps(true, true);
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
   });
 }
 

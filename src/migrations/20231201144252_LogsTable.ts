@@ -7,6 +7,8 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamp('time').notNullable();
     table.string('description').notNullable();
     table.foreign('order_id').references('id').inTable('order');
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
   });
 }
 
